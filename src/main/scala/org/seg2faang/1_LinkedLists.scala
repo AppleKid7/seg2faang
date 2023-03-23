@@ -76,14 +76,13 @@ enum LLNode[+A] { self =>
       case Node(e, nx) =>
         if (idx == 0)
           nx
+        else if (i < idx - 1)
+          Node(e, loop(nx, i + 1))
         else
-          if (i < idx - 1)
-            Node(e, loop(nx, i + 1))
-          else
-            nx match {
-              case Empty => Node(e, Empty)
-              case Node(_, nx) => Node(e, nx)
-            }
+          nx match {
+            case Empty => Node(e, Empty)
+            case Node(_, nx) => Node(e, nx)
+          }
     }
     loop(self, 0)
   }
