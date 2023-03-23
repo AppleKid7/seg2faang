@@ -69,6 +69,34 @@ enum LLNode[+A] { self =>
     loop(self, 0)
   }
 
+  private def reverse[A](ln: LLNode[A]): LLNode[A] = {
+    @tailrec
+    def loop(ln: LLNode[A], acc: LLNode[A]): LLNode[A] = ln match {
+      case Empty =>
+        acc
+      case Node(e, nx) =>
+        loop(nx, Node(e, acc))
+    }
+    loop(ln, Empty)
+  }
+
+  def insertNodeTailrec[B >: A](x: B, idx: Int): LLNode[B] = {
+    @tailrec
+    def loop(ln: LLNode[B], i: Int, acc: LLNode[B]): LLNode[B] = ln match {
+      case Empty =>
+        if (i < idx)
+          reverse(acc)
+        else
+          reverse(Node(x, acc))
+      case Node(e, nx) =>
+        if (i < idx)
+          loop(nx, i + 1, Node(e, acc))
+        else
+          reverse(Node(e, Node(x, acc)))
+    }
+    loop(self, 0, Empty)
+  }
+
   def deleteNode(idx: Int): LLNode[A] = {
     def loop(ln: LLNode[A], i: Int): LLNode[A] = ln match {
       case Empty =>
@@ -86,10 +114,33 @@ enum LLNode[+A] { self =>
     }
     loop(self, 0)
   }
+
+  def deleteNodeTailrec(idx: Int): LLNode[A] = {
+    @tailrec
+    def loop(ln: LLNode[A], i: Int, acc: LLNode[A]): LLNode[A] = ln match {
+      case Empty =>
+        reverse(acc)
+      case Node(e, nx) =>
+        if (idx == 0)
+          nx
+        else if (i < idx - 1)
+          loop(nx, i + 1, Node(e, acc))
+        else
+          nx match {
+            case Empty => Node(e, Empty)
+            case Node(_, nx) => reverse(Node(e, nx))
+          }
+    }
+    loop(self, 0, Empty)
+  }
 }
 
 @main def run: Unit =
   val newList = LLNode.Node(1, LLNode.Empty)
   newList.print
-  val newListAdd = newList.insertNode(2, 1)
+  val newListAdd = newList.insertNodeTailrec(2, 1)
   newListAdd.print
+  val newListAdd2 = newListAdd.insertNodeTailrec(3, 1)
+  newListAdd2.print
+  val remove = newListAdd2.deleteNode(2)
+  remove.print
