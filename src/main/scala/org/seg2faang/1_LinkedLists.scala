@@ -97,6 +97,17 @@ enum LLNode[+A] { self =>
     loop(self, 0, Empty)
   }
 
+  def insertNodeLastTailrec[B >: A](x: B): LLNode[B] = {
+    @tailrec
+    def loop(ln: LLNode[B], acc: LLNode[B]): LLNode[B] = ln match {
+      case Empty =>
+        reverse(Node(x, acc))
+      case Node(e, nx) =>
+        loop(nx, Node(e, acc))
+    }
+    loop(self, Empty)
+  }
+
   def deleteNode(idx: Int): LLNode[A] = {
     def loop(ln: LLNode[A], i: Int): LLNode[A] = ln match {
       case Empty =>
@@ -133,6 +144,20 @@ enum LLNode[+A] { self =>
     }
     loop(self, 0, Empty)
   }
+
+  def deleteNodeByValueTailrec[B >: A](value: B): LLNode[B] = {
+    @tailrec
+    def loop(ln: LLNode[B], value: B, acc: LLNode[B]): LLNode[B] = ln match {
+      case Empty =>
+        reverse(acc)
+      case Node(e, nx) =>
+        if (e == value)
+          reverse(acc)
+        else
+          loop(nx, value, Node(e, acc))
+    }
+    loop(self, value, Empty)
+  }
 }
 
 @main def run: Unit =
@@ -144,3 +169,7 @@ enum LLNode[+A] { self =>
   newListAdd2.print
   val remove = newListAdd2.deleteNode(2)
   remove.print
+  val insertLast = remove.insertNodeLastTailrec(4)
+  insertLast.print
+  val deleteByValue = insertLast.deleteNodeByValueTailrec(4)
+  deleteByValue.print
