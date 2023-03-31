@@ -160,7 +160,7 @@ enum LLNode[+A] { self =>
   }
 }
 
-@main def run: Unit =
+@main def runLinkedList: Unit =
   val newList = LLNode.Node(1, LLNode.Empty)
   newList.print
   val newListAdd = newList.insertNodeTailrec(2, 1)
