@@ -61,7 +61,7 @@ enum ImmutableQueueNode[+A] { self =>
   }
 }
 
-@main def runQueue = {
+@main def runImmutableQueue = {
   val q = ImmutableQueueNode.Empty
   val q1 = ImmutableQueueNode.ListNode(1, ImmutableQueueNode.Empty)
   val q2 = q1.enqueue(2)
