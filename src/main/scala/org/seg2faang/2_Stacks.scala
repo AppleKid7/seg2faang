@@ -45,7 +45,11 @@ enum StackElement[+A] { self =>
 
   def pop[B >: A](): (StackElement[B], StackElement[B]) = {
     @tailrec
-    def loop(previous: StackElement[B], current: StackElement[B], acc: StackElement[B]): (StackElement[B], StackElement[B]) = {
+    def loop(
+        previous: StackElement[B],
+        current: StackElement[B],
+        acc: StackElement[B]
+    ): (StackElement[B], StackElement[B]) = {
       current match {
         case Empty =>
           (previous, reverse(acc))
